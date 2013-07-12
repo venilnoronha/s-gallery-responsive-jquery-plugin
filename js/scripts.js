@@ -27,7 +27,7 @@
         this.$grid = $('.grid');
         this.$fsButton = $('.fs-toggle');
         this.$document = $(document);
-
+        this.$window = $(window);
         this.init();
     }
 
@@ -39,6 +39,7 @@
                 smallItem = smallItems.children('li'),
                 count = this.galleryContainer.children('ul:eq(1)').children('li').length,
                 options = this.options;
+                
 
             this.setDelays(smallItems);
             this.bindListHandler(smallItems);
@@ -47,8 +48,14 @@
             if(options.fullScreenEnabled){
                 this.controlFullScreen();
             }
-            $(window).load(function(){
-                $(window).resize(function(){
+            this.changeOnResize();
+            
+        },
+
+        changeOnResize: function(){
+            var that=this;
+            this.$window.load(function(){
+                that.$window.resize(function(){
 
                     that.initialHeight = that.galleryContainer.outerHeight();
 
@@ -56,7 +63,7 @@
                                 +  parseInt(that.galleryContainer.find('.item--big').css('top'))
                                 + $('.controls').height();
                 });
-                $(window).trigger('resize');
+                that.$window.trigger('resize');
             });
             
         },
@@ -123,7 +130,6 @@
         controlSlideShow: function(count){
 
             var that = this, key;
-                
 
             this.$document.on('keydown', function(e){
 
