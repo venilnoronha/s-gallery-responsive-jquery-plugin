@@ -69,10 +69,6 @@
   margin-right: 10px
 }
 
-.fs-toggle {
-  display: none
-}
-
 .showControls {
   opacity: 1;
   pointer-events: auto;
@@ -90,7 +86,7 @@
 .icon-arrow-right,
 .icon-fullscreen-exit,
 .icon-fullscreen {
-  display: inline-block;
+  display:inline-block;
   width: 20px;
   height: 20px;
   background-image: url(../images/controls-light2.png);
@@ -116,6 +112,10 @@
 .icon-fullscreen {
   background-position: -160px 0
 }
+.fs-toggle {
+  display: none;
+}
+
 
 .item {
   display: inline-block;

@@ -207,7 +207,7 @@
         controlFullScreen: function(){
             var that = this, gallery = this.element;
 
-            this.$fsButton.show().on('click', function(){
+            this.$fsButton.css('display', 'inline-block').on('click', function(){
                if (screenfull.enabled) {
                     screenfull.toggle(gallery);
                     if(!that.isFullScreen){
