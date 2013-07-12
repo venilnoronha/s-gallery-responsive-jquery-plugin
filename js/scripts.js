@@ -7,7 +7,7 @@
 
 ;(function ( $, window, document, undefined ) {
 
-    var pluginName = "imageGallery",
+    var pluginName = "sGallery",
         defaults = {
             fullScreenEnabled: false
         };
