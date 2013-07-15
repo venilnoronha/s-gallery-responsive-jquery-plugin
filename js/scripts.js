@@ -15,6 +15,8 @@
     function Plugin( element, options ) {
         this.element = element;
         this.galleryContainer = $(this.element);
+        this.bigItemsList = this.galleryContainer.children('ul:eq(1)');
+        this.bigItem = this.bigItemsList.children('li');
         this.options = $.extend( {}, defaults, options );
         this._defaults = defaults;
         this._name = pluginName;
@@ -37,7 +39,7 @@
             var that = this,
                 smallItems = this.galleryContainer.find('ul:eq(0)'),
                 smallItem = smallItems.children('li'),
-                count = this.galleryContainer.children('ul:eq(1)').children('li').length,
+                count = this.bigItem.length,
                 options = this.options;
                 
 
@@ -53,15 +55,19 @@
         },
 
         changeOnResize: function(){
-            var that=this;
+            var that = this;
+
             this.$window.load(function(){
+
                 that.$window.resize(function(){
 
                     that.initialHeight = that.galleryContainer.outerHeight();
 
-                    that.minHeight = that.galleryContainer.find('li.item--big').height()
-                                +  parseInt(that.galleryContainer.find('.item--big').css('top'))
-                                + $('.controls').height();
+                    that.minHeight = that.bigItem.height()
+                                    +  parseInt(that.bigItem.css('top'))
+                                    + that.$controls.height();
+                    that.adaptHeight();
+                   
                 });
                 that.$window.trigger('resize');
             });
@@ -75,8 +81,7 @@
         },
 
         bindListHandler: function(smallItems){
-            var that = this,
-                bigItems = this.galleryContainer.children('ul:eq(1)');
+            var that = this;
 
             smallItems.on('click', 'li', function(e){
                 e.preventDefault();
@@ -85,23 +90,25 @@
                 that.fadeAllOut();
                 that.showControls();
                 that.slideshow = true;
-                startImg = bigItems.children('li:eq(' + that.current + ')');
+                startImg = that.bigItemsList.children('li:eq(' + that.current + ')');
                 $this.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
                     startImg.addClass('fadeInScaleUp').removeClass('fadeOut');
-                                         });
-                if(that.initialHeight < that.minHeight){
-                    $(that.element).animate({'height': that.minHeight + 'px'}, 500);
-                }
-                that.adaptHeight();
-                    
+                    that.adaptHeight();
+                });   
             });
         },
 
         adaptHeight: function(){
-            var that = this;
-            var height = this.galleryContainer.children('ul:eq(1)').children('li').outerHeight();
-            var newHeight = height + this.$controls.outerHeight() * 4;
-            $(this.element).animate({'height': newHeight + 'px'}, 1500);
+            var that = this,
+                height = this.bigItem.outerHeight(),
+                newHeight = height + this.$controls.outerHeight() * 4;
+
+            if(that.slideshow && that.initialHeight < that.minHeight){
+                $(that.element).animate({'height': that.minHeight + 'px'}, 500);
+            }
+            if(that.slideshow && that.initialHeight > newHeight){
+                $(this.element).animate({'height': newHeight + 'px'}, 500);
+            }
         },
 
         fadeAllOut: function(){
@@ -179,10 +186,9 @@
         },
 
         moveToNextImage: function(){
-            var that = this,
-                bigItems = this.galleryContainer.children('ul:eq(1)');
+            var that = this;
 
-            var currentImg = bigItems.children('li:eq(' + that.current + ')')
+            var currentImg = this.bigItemsList.children('li:eq(' + that.current + ')')
                                          .addClass('fadeInScaleUp')
                                          .siblings('li')
                                          .filter('.fadeInScaleUp')
