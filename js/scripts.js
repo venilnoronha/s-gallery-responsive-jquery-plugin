@@ -65,7 +65,7 @@
 
                     that.minHeight = that.bigItem.height()
                                     +  parseInt(that.bigItem.css('top'))
-                                    + that.$controls.height();
+                                    + that.$controls.height() * 2;
                     that.adaptHeight();
                    
                 });
@@ -100,14 +100,12 @@
 
         adaptHeight: function(){
             var that = this,
-                height = this.bigItem.outerHeight(),
-                newHeight = height + this.$controls.outerHeight() * 4;
-
+                height = this.bigItem.outerHeight();
             if(that.slideshow && that.initialHeight < that.minHeight){
                 $(that.element).animate({'height': that.minHeight + 'px'}, 500);
             }
-            if(that.slideshow && that.initialHeight > newHeight){
-                $(this.element).animate({'height': newHeight + 'px'}, 500);
+            else if(that.slideshow && that.initialHeight > that.minHeight){
+                $(this.element).animate({'height': that.minHeight + 'px'}, 500);
             }
         },
 
@@ -247,7 +245,7 @@
             var that = this;
 
             if(!this.isFullScreen){
-                this.galleryContainer.animate({'height' : that.initialHeight}, 1000, function(){
+                this.galleryContainer.animate({'height' : that.initialHeight}, 500, function(){
                     $(this).css('height', 'auto');
                 });
             }
