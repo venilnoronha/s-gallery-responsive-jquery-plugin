@@ -102,10 +102,10 @@
             var that = this,
                 height = this.bigItem.outerHeight();
             if(that.slideshow && that.initialHeight < that.minHeight){
-                $(that.element).animate({'height': that.minHeight + 'px'}, 500);
+                $(that.element).animate({'height': that.minHeight + 'px'}, 1000);
             }
             else if(that.slideshow && that.initialHeight > that.minHeight){
-                $(this.element).animate({'height': that.minHeight + 'px'}, 500);
+                $(this.element).animate({'height': that.minHeight + 'px'}, 1000);
             }
         },
 
@@ -245,7 +245,7 @@
             var that = this;
 
             if(!this.isFullScreen){
-                this.galleryContainer.animate({'height' : that.initialHeight}, 500, function(){
+                this.galleryContainer.animate({'height' : that.initialHeight}, 1000, function(){
                     $(this).css('height', 'auto');
                 });
             }
