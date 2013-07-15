@@ -15,7 +15,6 @@
     function Plugin( element, options ) {
         this.element = element;
         this.galleryContainer = $(this.element);
-        // this.bigImgsHeight = this.galleryContainer.children('ul:eq(1)').children('li').height();
         this.options = $.extend( {}, defaults, options );
         this._defaults = defaults;
         this._name = pluginName;
