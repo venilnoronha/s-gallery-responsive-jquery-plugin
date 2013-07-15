@@ -15,6 +15,7 @@
     function Plugin( element, options ) {
         this.element = element;
         this.galleryContainer = $(this.element);
+        // this.bigImgsHeight = this.galleryContainer.children('ul:eq(1)').children('li').height();
         this.options = $.extend( {}, defaults, options );
         this._defaults = defaults;
         this._name = pluginName;
@@ -92,10 +93,17 @@
                 if(that.initialHeight < that.minHeight){
                     $(that.element).animate({'height': that.minHeight + 'px'}, 500);
                 }
+                that.adaptHeight();
                     
             });
         },
 
+        adaptHeight: function(){
+            var that = this;
+            var height = this.galleryContainer.children('ul:eq(1)').children('li').outerHeight();
+            var newHeight = height + this.$controls.outerHeight() * 4;
+            $(this.element).animate({'height': newHeight + 'px'}, 1500);
+        },
 
         fadeAllOut: function(){
             this.galleryContainer.children('ul:eq(0)')
