@@ -66,7 +66,6 @@
                     that.minHeight = that.bigItem.height()
                                     +  parseInt(that.bigItem.css('top'))
                                     + that.$controls.height() * 2;
-                                    console.log('window resize');
                     that.adaptHeight();
                    
                 });
@@ -104,11 +103,9 @@
                 height = this.bigItem.outerHeight();
             if(that.slideshow && that.initialHeight < that.minHeight){
                 $(that.element).animate({'height': that.minHeight + 'px'}, 0);
-                console.log('adapting height first if');
             }
             else if(that.slideshow && that.initialHeight > that.minHeight){
                 $(this.element).animate({'height': that.minHeight + 'px'}, 0);
-                console.log('adapting height second if');
             }
         },
 
