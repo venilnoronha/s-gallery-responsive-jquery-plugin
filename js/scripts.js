@@ -9,7 +9,8 @@
 
     var pluginName = "sGallery",
         defaults = {
-            fullScreenEnabled: false
+            fullScreenEnabled: false,
+			animateThumbnails: true
         };
 
     function Plugin( element, options ) {
@@ -44,6 +45,9 @@
                 
 
             this.setDelays(smallItems);
+			if(options.animateThumbnails) {
+				this.bindOpacityHandler(smallItems);
+			}
             this.bindListHandler(smallItems);
             this.handleQuit();
             this.controlSlideShow(count);
@@ -102,6 +106,20 @@
             });
         },
 
+		bindOpacityHandler: function(smallItems) {
+			smallItems.find('img')
+			.css('opacity', '0.7')
+			.hover(function(){
+				$(this).stop().animate({
+					opacity: '1'
+				}, 150);
+			}, function(){
+				$(this).stop().animate({
+					opacity: '0.7'
+				}, 300);
+			});
+		},
+		
         bindListHandler: function(smallItems){
             var that = this;
 
