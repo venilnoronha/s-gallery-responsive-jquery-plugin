@@ -50,13 +50,22 @@
             if(options.fullScreenEnabled){
                 this.controlFullScreen();
             }
-            this.changeOnResize();
+            this.changeHeight();
             
         },
 
-        changeOnResize: function(){
-            var that = this;
+        changeHeight: function(speed){
+            var that = this,
+                speed = speed || 0 ,
+                currentImg = this.bigItemsList.children('li:eq(' + that.current + ')');
 
+            this.initialHeight = this.galleryContainer.outerHeight(),
+            this.minHeight = currentImg.height()
+                                +  parseInt(this.bigItem.css('top'))
+                                + this.$controls.height() * 2;
+            this.adaptHeight(speed);
+
+            //update above values and adapt height again on window resize
             this.$window.load(function(){
 
                 that.$window.resize(function(){
@@ -66,12 +75,25 @@
                     that.minHeight = that.bigItem.height()
                                     +  parseInt(that.bigItem.css('top'))
                                     + that.$controls.height() * 2;
-                    that.adaptHeight();
+                    that.adaptHeight(speed);
                    
                 });
                 that.$window.trigger('resize');
             });
+           
             
+        },
+
+        adaptHeight: function(speed){
+
+            var that = this,
+                height = this.bigItem.outerHeight();
+            if(that.slideshow && that.initialHeight < that.minHeight){
+                $(that.element).animate({'height': that.minHeight + 'px'}, speed);
+            }
+            else if(that.slideshow && that.initialHeight > that.minHeight){
+                $(this.element).animate({'height': that.minHeight + 'px'}, speed);
+            }
         },
 
         setDelays: function(smallItems){
@@ -93,20 +115,10 @@
                 startImg = that.bigItemsList.children('li:eq(' + that.current + ')');
                 $this.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
                     startImg.addClass('fadeInScaleUp').removeClass('fadeOut');
-                    that.adaptHeight();
+                    that.bigItemsList.css('pointer-events', 'auto');
+                    that.changeHeight(600);
                 });   
             });
-        },
-
-        adaptHeight: function(){
-            var that = this,
-                height = this.bigItem.outerHeight();
-            if(that.slideshow && that.initialHeight < that.minHeight){
-                $(that.element).animate({'height': that.minHeight + 'px'}, 0);
-            }
-            else if(that.slideshow && that.initialHeight > that.minHeight){
-                $(this.element).animate({'height': that.minHeight + 'px'}, 0);
-            }
         },
 
         fadeAllOut: function(){
@@ -195,6 +207,7 @@
                                          .one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function(e) {
                                             $(this).removeClass('fadeOut');
                                          });
+            this.changeHeight(600);
         },
 
         handleQuit: function(){
@@ -249,7 +262,7 @@
                     $(this).css('height', 'auto');
                 });
             }
-
+            this.bigItemsList.css('pointer-events', 'none');
             var currentImg = this.galleryContainer.children('ul:eq(1)').children('li:eq(' + that.current + ')'),
                   dropZone = this.galleryContainer.children('ul:eq(0)').children('li:eq(' + that.current + ')'),
                     height = dropZone.height(),
